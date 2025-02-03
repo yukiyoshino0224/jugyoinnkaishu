@@ -106,6 +106,9 @@ public class AdministratorController {
 			redirectAttributes.addFlashAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
 			return "redirect:/";
 		}
+
+		redirectAttributes.addFlashAttribute("administrators", administrator);
+
 		return "redirect:/employee/showList";
 	}
 
