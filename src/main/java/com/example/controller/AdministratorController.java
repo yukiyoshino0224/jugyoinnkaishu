@@ -108,6 +108,7 @@ public class AdministratorController {
 		}
 
 		redirectAttributes.addFlashAttribute("administrators", administrator);
+		// session.setAttribute("admininstrators", administrator);
 
 		return "redirect:/employee/showList";
 	}

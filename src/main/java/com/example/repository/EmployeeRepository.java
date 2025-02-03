@@ -10,7 +10,10 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+
 import com.example.domain.Employee;
+
+
 
 /**
  * employeesテーブルを操作するリポジトリ.
@@ -20,6 +23,8 @@ import com.example.domain.Employee;
  */
 @Repository
 public class EmployeeRepository {
+
+	
 
 	/**
 	 * Employeeオブジェクトを生成するローマッパー.
@@ -56,6 +61,19 @@ public class EmployeeRepository {
 
 		return developmentList;
 	}
+
+	public List<Employee> findByNameContaining(String name) {
+		String sql = "SELECT id, name, image, gender, hire_date, mail_address, zip_code, address, telephone, salary, characteristics, dependents_count " +
+					 "FROM employees " +
+					 "WHERE name LIKE :namePattern";
+
+		SqlParameterSource param = new MapSqlParameterSource()
+		.addValue("namePattern", "%" + name + "%");
+
+		return template.query(sql, param, EMPLOYEE_ROW_MAPPER);
+    }
+
+
 
 	/**
 	 * 主キーから従業員情報を取得します.
