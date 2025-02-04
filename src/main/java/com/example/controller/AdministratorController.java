@@ -4,6 +4,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import com.example.form.LoginForm;
 import com.example.service.AdministratorService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 /**
  * 管理者情報を操作するコントローラー.
@@ -69,15 +71,26 @@ public class AdministratorController {
 	 * 管理者情報を登録します.
 	 * 
 	 * @param form 管理者情報用フォーム
+	 * @param bindingResult
 	 * @return ログイン画面へリダイレクト
 	 */
 	@PostMapping("/insert")
-	public String insert(InsertAdministratorForm form) {
+	public String insert(@Valid InsertAdministratorForm form, BindingResult bindingResult, Model model) {
+
+		if (administratorService.isMailAddressDuplicate(form.getMailAddress())) {
+			bindingResult.rejectValue("mailAddress", "error.duplicate", "メールアドレスが重複しています");
+		}
+
+		if(bindingResult.hasErrors()){
+			return "administrator/insert";
+		}
+
 		Administrator administrator = new Administrator();
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
 		administratorService.insert(administrator);
-		return "employee/list";
+
+		return "redirect:/employee/list";
 	}
 
 	/////////////////////////////////////////////////////
@@ -97,20 +110,23 @@ public class AdministratorController {
 	 * ログインします.
 	 * 
 	 * @param form 管理者情報用フォーム
+	 * @param bindingResult
+	 * @param model
 	 * @return ログイン後の従業員一覧画面
 	 */
 	@PostMapping("/login")
-	public String login(LoginForm form, Model model) {
+	public String login(@Valid LoginForm form, BindingResult bindingResult, Model model) {
+		
+		if(bindingResult.hasErrors()){
+			return "administrator/insert";
+		}
+
 		Administrator administrator = administratorService.login(form.getMailAddress(), form.getPassword());
 		if (administrator == null) {
 			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です");
 			return "administrator/login";
-
-			// redirectAttributes.addFlashAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
-			// return "redirect:/";
 		}
 
-		// redirectAttributes.addFlashAttribute("administrators", administrator);
 		session.setAttribute("administrators", administrator);
 	
 		return "redirect:/employee/showList";
@@ -129,5 +145,5 @@ public class AdministratorController {
 		session.invalidate();
 		return "redirect:/";
 	}
-	
+
 }

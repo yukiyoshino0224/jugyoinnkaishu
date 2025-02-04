@@ -20,6 +20,10 @@ public class AdministratorService {
 	@Autowired
 	private AdministratorRepository administratorRepository;
 
+	public boolean isMailAddressDuplicate(String mailAddress) {
+        return administratorRepository.findByMailAddress(mailAddress) != null;
+    }
+
 	/**
 	 * 管理者情報を登録します.
 	 * 

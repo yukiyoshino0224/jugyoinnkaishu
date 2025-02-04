@@ -57,12 +57,17 @@
                   <div class="row">
                     <div class="col-sm-12">
                       <label for="name"> 氏名: </label>
-                      <label
+                      <div th:if="${#fields.hasErrors('name')}" class="error-messages">
+                        <ul>
+                          <li th:each="err : ${#fields.errors('name')}" th:text="${err}"></li>
+                        </ul>
+                      </div>
+                      <!-- <label
                         th:errors="*{name}"
                         class="error-messages"
                       >
                         氏名を入力してください
-                      </label>
+                      </label> -->
                       <input
                         type="text"
                         name="name"
@@ -81,12 +86,17 @@
                   <div class="row">
                     <div class="col-sm-12">
                       <label for="mailAddress"> メールアドレス: </label>
-                      <label
+                      <div th:if="${#fields.hasErrors('mailAddress')}" class="error-messages">
+                        <ul>
+                          <li th:each="err : ${#fields.errors('mailAddress')}" th:text="${err}"></li>
+                        </ul>
+                      </div>
+                      <!-- <label
                         th:errors="*{mailAddress}"
                         class="error-messages"
                       >
                         メールアドレスを入力してください
-                      </label>
+                      </label> -->
                       <input
                         type="text"
                         name="mailAddress"
@@ -105,12 +115,17 @@
                   <div class="row">
                     <div class="col-sm-12">
                       <label for="password"> パスワード: </label>
-                      <label
+                      <div th:if="${#fields.hasErrors('password')}" class="error-messages">
+                        <ul>
+                          <li th:each="err : ${#fields.errors('password')}" th:text="${err}"></li>
+                        </ul>
+                      </div>
+                      <!-- <label
                         th:errors="*{password}"
                         class="error-messages"
                       >
                         パスワードを入力してください
-                      </label>
+                      </label> -->
                       <input
                         type="password"
                         name="password"
