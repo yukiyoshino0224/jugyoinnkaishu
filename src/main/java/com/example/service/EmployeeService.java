@@ -32,6 +32,10 @@ public class EmployeeService {
 		return employeeList;
 	}
 
+	public List<Employee> searchByName(String name){
+		return employeeRepository.findByNameContaining(name);
+	}
+
 	/**
 	 * 従業員情報を取得します.
 	 * 

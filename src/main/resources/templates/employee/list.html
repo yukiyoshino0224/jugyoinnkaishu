@@ -67,7 +67,7 @@
               </li>
             </ul>
             <p class="navbar-text navbar-right">
-              <span th:text="${administratorName}">山田太郎</span
+              <span th:if="${session.administrators != null}" th:text="${session.administrators.name}">山田太郎</span
               >さんこんにちは！ &nbsp;&nbsp;&nbsp;
               <a
                 href="../administrator/login.html"
@@ -97,6 +97,20 @@
           <!-- ここから上を編集する必要はありません -->
 
           <!-- ここにモックのtable要素を貼り付けます -->
+           <form method="get" action="showList" class="form-inline">
+  <div class="form-group">
+    <label for="searchName"></label>
+    <input
+      type="text"
+      id="searchName"
+      name="name"
+      class="form-control"
+      placeholder="従業員名で検索"
+      th:value="${searchName}"
+    />
+  </div>
+  <button type="submit" class="btn btn-primary">検索</button>
+</form>
 
           <table class="table table-striped">
             <thead>

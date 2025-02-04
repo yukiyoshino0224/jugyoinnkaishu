@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.domain.Employee;
 import com.example.form.UpdateEmployeeForm;
@@ -28,6 +29,7 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeService employeeService;
+	
 
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
@@ -46,11 +48,21 @@ public class EmployeeController {
 	 * 従業員一覧画面を出力します.
 	 * 
 	 * @param model モデル
+	 * @param searchName 
 	 * @return 従業員一覧画面
 	 */
 	@GetMapping("/showList")
-	public String showList(Model model) {
-		List<Employee> employeeList = employeeService.showList();
+	public String showList(@RequestParam(required = false) String name, Model model) {
+		List<Employee> employeeList;
+
+		if(name != null && !name.isEmpty()){
+			employeeList = employeeService.searchByName(name);
+			model.addAttribute("searchName", name);
+		}else{
+			employeeList = employeeService.showList();
+		}
+		
+
 		model.addAttribute("employeeList", employeeList);
 		return "employee/list";
 	}
